@@ -8,12 +8,12 @@ export default function Home () {
   useEffect(() => {
     async function fetchSatelliteData () {
       try {
-        const response = await fetch('/api/satellite')
+        const response = await fetch('api/satellite')
         if (!response.ok) {
           throw new Error('Failed to fetch satellite data')
         }
         const data = await response.json()
-        setSatelliteData(data)
+        setSatelliteData(data.orbital[0].position)
       } catch (error) {
         console.error('Error fetching satellite data:', error)
       }
@@ -21,15 +21,9 @@ export default function Home () {
 
     fetchSatelliteData()
   }, [])
-
   return (
     <Layout title='Google Maps App'>
-      {satelliteData && (
-        <Map
-          center={{ lat: satelliteData.latitude, lng: satelliteData.longitude }}
-          zoom={13}
-        />
-      )}
+      <Map satelliteData={satelliteData} />
     </Layout>
   )
 }
